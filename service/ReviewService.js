@@ -5,9 +5,44 @@
  * Retrieve reviews for a movie
  *
  * id Review ID of the movie to retrieve reviews for
- * returns Review
+ * returns List
  **/
 exports.moviesIdReviewsGET = function(id) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = [ {
+  "user_id" : 1,
+  "post_date" : "2000-01-23",
+  "rating" : 5,
+  "id" : 0,
+  "movie_id" : 6,
+  "message" : "message",
+  "likes" : 5
+}, {
+  "user_id" : 1,
+  "post_date" : "2000-01-23",
+  "rating" : 5,
+  "id" : 0,
+  "movie_id" : 6,
+  "message" : "message",
+  "likes" : 5
+} ];
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
+  });
+}
+
+
+/**
+ * Create a new review for a movie
+ *
+ * id Review ID of the movie to create a review for
+ * returns Review
+ **/
+exports.moviesIdReviewsPOST = function(id) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
@@ -24,19 +59,6 @@ exports.moviesIdReviewsGET = function(id) {
     } else {
       resolve();
     }
-  });
-}
-
-
-/**
- * Create a new review for a movie
- *
- * id Review ID of the movie to create a review for
- * no response value expected for this operation
- **/
-exports.moviesIdReviewsPOST = function(id) {
-  return new Promise(function(resolve, reject) {
-    resolve();
   });
 }
 
@@ -74,11 +96,25 @@ exports.moviesMovie_idReviewsReview_idLikePOST = function(movie_id,review_id) {
  *
  * movie_id Movie ID of the movie that contains the review
  * review_id Review ID of the review to update
- * no response value expected for this operation
+ * returns Review
  **/
 exports.moviesMovie_idReviewsReview_idPUT = function(movie_id,review_id) {
   return new Promise(function(resolve, reject) {
-    resolve();
+    var examples = {};
+    examples['application/json'] = {
+  "user_id" : 1,
+  "post_date" : "2000-01-23",
+  "rating" : 5,
+  "id" : 0,
+  "movie_id" : 6,
+  "message" : "message",
+  "likes" : 5
+};
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
   });
 }
 

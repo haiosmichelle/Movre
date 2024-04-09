@@ -13,8 +13,8 @@ module.exports.createUser = function createUser (req, res, next, body) {
     });
 };
 
-module.exports.deleteUser = function deleteUser (req, res, next,email) {
-  User.deleteUser(email)
+module.exports.createUser = function createUser (req, res, next, body) {
+  User.createUser(body)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -23,8 +23,8 @@ module.exports.deleteUser = function deleteUser (req, res, next,email) {
     });
 };
 
-module.exports.getUser = function getUser (req, res, next) {
-  User.getUser()
+module.exports.deleteUser = function deleteUser (req, res, next) {
+  User.deleteUser()
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -33,8 +33,18 @@ module.exports.getUser = function getUser (req, res, next) {
     });
 };
 
-module.exports.loginUser = function loginUser (req, res, next,email,password) {
-  User.loginUser(email,password)
+module.exports.getUser = function getUser (req, res, next, username, email) {
+  User.getUser(username, email)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.loginUser = function loginUser (req, res, next) {
+  User.loginUser()
     .then(function (response) {
       utils.writeJson(res, response);
     })

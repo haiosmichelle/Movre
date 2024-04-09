@@ -4,19 +4,26 @@
 /**
  * Retrieve all movies
  *
- * returns Movie
+ * returns List
  **/
 exports.moviesGET = function() {
   return new Promise(function(resolve, reject) {
     var examples = {};
-    examples['application/json'] = {
+    examples['application/json'] = [ {
   "release" : "2000-01-23",
   "name" : "name",
   "description" : "description",
   "runtime" : 6,
   "id" : 0,
   "picture" : ""
-};
+}, {
+  "release" : "2000-01-23",
+  "name" : "name",
+  "description" : "description",
+  "runtime" : 6,
+  "id" : 0,
+  "picture" : ""
+} ];
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {

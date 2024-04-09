@@ -1,24 +1,25 @@
 openapi: 3.0.3
 info:
   title: MOVRE
-  description: |-
-   Este un Rest API pentru iubitorii de filme. Acestia pot lasa recenzii la filme pentru a ajuta alte persoane sa se decida la ce vor sa se uite.
+  description: Este un Rest API pentru iubitorii de filme. Acestia pot lasa recenzii
+    la filme pentru a ajuta alte persoane sa se decida la ce vor sa se uite.
   version: 1.0.0
 servers:
-  - url: /movre/
+- url: /movre/
 tags:
-  - name: user
-    description: Operatii cu useri
-  - name: movie
-  - name: review
+- name: user
+  description: Operatii cu useri
+- name: movie
+- name: review
 paths:
   /movies/:
     get:
-      tags: 
-        - movie
+      tags:
+      - movie
       summary: Retrieve all movies
+      operationId: moviesGET
       responses:
-        '200':
+        "200":
           description: A list of movies
           content:
             application/json:
@@ -26,43 +27,52 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Movie'
-        '404':
+                x-content-type: application/json
+        "404":
           description: Movies not found
+      x-swagger-router-controller: Movie
   /movies/{id}/:
     get:
-      tags: 
-        - movie
+      tags:
+      - movie
       summary: Retrieve movie by ID
+      operationId: moviesIdGET
       parameters:
-        - name: id
-          in: path
-          required: true
-          description: ID of the movie to retrieve
-          schema:
-            $ref: '#/components/schemas/Movie'
+      - name: id
+        in: path
+        description: ID of the movie to retrieve
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/Movie'
       responses:
-        '200':
+        "200":
+          description: Movie details
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Movie'
-          description: Movie details
-        '404':
+        "404":
           description: Movie not found
+      x-swagger-router-controller: Movie
   /movies/{id}/reviews/:
     get:
-      tags: 
-        - review
+      tags:
+      - review
       summary: Retrieve reviews for a movie
+      operationId: moviesIdReviewsGET
       parameters:
-        - name: id
-          in: path
-          required: true
-          description: ID of the movie to retrieve reviews for
-          schema:
-            $ref: '#/components/schemas/Review' 
+      - name: id
+        in: path
+        description: ID of the movie to retrieve reviews for
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/Review'
       responses:
-        '200':
+        "200":
           description: Reviews for the movie
           content:
             application/json:
@@ -70,104 +80,128 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Review'
-        '404':
+                x-content-type: application/json
+        "404":
           description: not found
+      x-swagger-router-controller: Review
     post:
-      tags: 
-        - review
+      tags:
+      - review
       summary: Create a new review for a movie
+      operationId: moviesIdReviewsPOST
       parameters:
-        - name: id
-          in: path
-          required: true
-          description: ID of the movie to create a review for
-          schema:
-            $ref: '#/components/schemas/Review'
+      - name: id
+        in: path
+        description: ID of the movie to create a review for
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/Review'
       responses:
-        '201':
+        "201":
           description: Review created successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Review'
-        '400':
+        "400":
           description: Bad Request
+      x-swagger-router-controller: Review
   /movies/{movie_id}/reviews/{review_id}/:
-    delete:
-      tags: 
-        - review
-      summary: Delete a review
-      parameters:
-        - name: movie_id
-          in: path
-          required: true
-          description: ID of the movie that contains the review
-          schema:
-            $ref: '#/components/schemas/Movie' 
-        - name: review_id
-          in: path
-          required: true
-          description: ID of the review to delete
-          schema:
-            $ref: '#/components/schemas/Review'
-      responses:
-        '204':
-          description: Review deleted successfully
-        '404':
-          description: not found
     put:
-      tags: 
-        - review
+      tags:
+      - review
       summary: Update a review
+      operationId: moviesMovie_idReviewsReview_idPUT
       parameters:
-        - name: movie_id
-          in: path
-          required: true
-          description: ID of the movie that contains the review
-          schema:
-            $ref: '#/components/schemas/Movie'
-        - name: review_id
-          in: path
-          required: true
-          description: ID of the review to update
-          schema:
-            $ref: '#/components/schemas/Review'
+      - name: movie_id
+        in: path
+        description: ID of the movie that contains the review
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/Movie'
+      - name: review_id
+        in: path
+        description: ID of the review to update
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/Review'
       responses:
-       '200':
+        "200":
           description: Review updated successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Review'
-       '404':
+        "404":
           description: Review not found
+      x-swagger-router-controller: Review
+    delete:
+      tags:
+      - review
+      summary: Delete a review
+      operationId: moviesMovie_idReviewsReview_idDELETE
+      parameters:
+      - name: movie_id
+        in: path
+        description: ID of the movie that contains the review
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/Movie'
+      - name: review_id
+        in: path
+        description: ID of the review to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/Review'
+      responses:
+        "204":
+          description: Review deleted successfully
+        "404":
+          description: not found
+      x-swagger-router-controller: Review
   /movies/{movie_id}/reviews/{review_id}/like/:
     post:
-      tags: 
-        - review
+      tags:
+      - review
       summary: Like a review
+      operationId: moviesMovie_idReviewsReview_idLikePOST
       parameters:
-        - name: movie_id
-          in: path
-          required: true
-          description: ID of the movie that contains the review
-          schema:
-            $ref: '#/components/schemas/Movie'
-        - name: review_id
-          in: path
-          required: true
-          description: ID of the review to like
-          schema:
-            $ref: '#/components/schemas/Review'
+      - name: movie_id
+        in: path
+        description: ID of the movie that contains the review
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/Movie'
+      - name: review_id
+        in: path
+        description: ID of the review to like
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/Review'
       responses:
-        '200':
-          description: Review liked successfully  
-        '404':
+        "200":
+          description: Review liked successfully
+        "404":
           description: Review not found
+      x-swagger-router-controller: Review
   /signup:
     post:
       tags:
-        - user
+      - user
       summary: Creare user
       description: creare cont user
       operationId: createUser
@@ -184,6 +218,14 @@ paths:
             schema:
               $ref: '#/components/schemas/User'
       responses:
+        "201":
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "400":
+          description: Invalid input
         default:
           description: successful operation
           content:
@@ -193,77 +235,81 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/User'
-        '201':
-          description: User created successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        '400':
-          description: Invalid input
+      x-swagger-router-controller: User
   /users/login:
     post:
       tags:
-        - user
-      summary: se conecteaza la cont 
-      description: ''
+      - user
+      summary: se conecteaza la cont
+      description: ""
       operationId: loginUser
       responses:
-        '200':
+        "200":
           description: Autentificare reușită
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-        '400':
+        "400":
           description: Invalid username/password supplied
+      x-swagger-router-controller: User
   /users:
     get:
       tags:
-        - user
-      summary: returneaza datele userului 
-      description: ''
+      - user
+      summary: returneaza datele userului
+      description: ""
       operationId: getUser
       parameters:
-        - name: username
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: email
-          in: query
-          required: false
-          schema:
-            type: string
+      - name: username
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: email
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'          
+                $ref: '#/components/schemas/User'
             application/xml:
               schema:
                 $ref: '#/components/schemas/User'
-        '404':
-          description:  not found
+        "404":
+          description: not found
+      x-swagger-router-controller: User
     put:
       tags:
-        - user
+      - user
       summary: Update user
-      description: o poate face doar daca este logat, poate sa si schimbe emailul sau parola
+      description: "o poate face doar daca este logat, poate sa si schimbe emailul\
+        \ sau parola"
       operationId: updateUser
       parameters:
-        - name: email
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: password
-          in: query
-          required: false
-          schema:
-            type: string
+      - name: email
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: password
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
       requestBody:
         description: Update an existent user in the store
         content:
@@ -277,27 +323,29 @@ paths:
             schema:
               $ref: '#/components/schemas/User'
       responses:
-        '200':
+        "200":
           description: User updated successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-        '400':
+        "400":
           description: Invalid input
-        '404':
+        "404":
           description: not found
+      x-swagger-router-controller: User
     delete:
       tags:
-        - user
+      - user
       summary: Delete user
       description: o poate face doar daca este logat la cont
       operationId: deleteUser
       responses:
-        '204':
+        "204":
           description: User deleted successfully
-        '404':
+        "404":
           description: not found
+      x-swagger-router-controller: User
 components:
   schemas:
     Movie:
@@ -317,6 +365,13 @@ components:
         release:
           type: string
           format: date
+      example:
+        release: 2000-01-23
+        name: name
+        description: description
+        runtime: 6
+        id: 0
+        picture: ""
     Category:
       type: object
       properties:
@@ -342,6 +397,14 @@ components:
           type: integer
         likes:
           type: integer
+      example:
+        user_id: 1
+        post_date: 2000-01-23
+        rating: 5
+        id: 0
+        movie_id: 6
+        message: message
+        likes: 5
     User:
       type: object
       properties:
@@ -356,3 +419,9 @@ components:
         birth_date:
           type: string
           format: date
+      example:
+        password: password
+        birth_date: 2000-01-23
+        name: name
+        id: 0
+        email: email

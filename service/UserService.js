@@ -1,7 +1,6 @@
 'use strict';
 const User = require('../models/user');
 const { Sequelize, literal } = require('sequelize');
-const { hashPassword, checkPassword } = require('../config/password');
 
 /**
  * Creare user
