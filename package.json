@@ -1,0 +1,26 @@
+{
+  "name": "movre",
+  "version": "1.0.0",
+  "description": "Este un Rest API pentru iubitorii de filme. Acestia pot lasa recenzii la filme pentru a ajuta alte persoane sa se decida la ce vor sa se uite.",
+  "main": "index.js",
+  "scripts": {
+    "prestart": "npm install",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "swagger"
+  ],
+  "license": "Unlicense",
+  "private": true,
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "connect": "^3.2.0",
+    "js-yaml": "^3.3.0",
+    "mysql2": "^3.9.3",
+    "oas3-tools": "^2.2.3",
+    "pg": "^8.11.3",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.1",
+    "sqlite3": "^5.1.7"
+  }
+}

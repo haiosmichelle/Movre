@@ -1,0 +1,358 @@
+openapi: 3.0.3
+info:
+  title: MOVRE
+  description: |-
+   Este un Rest API pentru iubitorii de filme. Acestia pot lasa recenzii la filme pentru a ajuta alte persoane sa se decida la ce vor sa se uite.
+  version: 1.0.0
+servers:
+  - url: /movre/
+tags:
+  - name: user
+    description: Operatii cu useri
+  - name: movie
+  - name: review
+paths:
+  /movies/:
+    get:
+      tags: 
+        - movie
+      summary: Retrieve all movies
+      responses:
+        '200':
+          description: A list of movies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Movie'
+        '404':
+          description: Movies not found
+  /movies/{id}/:
+    get:
+      tags: 
+        - movie
+      summary: Retrieve movie by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the movie to retrieve
+          schema:
+            $ref: '#/components/schemas/Movie'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+          description: Movie details
+        '404':
+          description: Movie not found
+  /movies/{id}/reviews/:
+    get:
+      tags: 
+        - review
+      summary: Retrieve reviews for a movie
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the movie to retrieve reviews for
+          schema:
+            $ref: '#/components/schemas/Review' 
+      responses:
+        '200':
+          description: Reviews for the movie
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+        '404':
+          description: not found
+    post:
+      tags: 
+        - review
+      summary: Create a new review for a movie
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the movie to create a review for
+          schema:
+            $ref: '#/components/schemas/Review'
+      responses:
+        '201':
+          description: Review created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+        '400':
+          description: Bad Request
+  /movies/{movie_id}/reviews/{review_id}/:
+    delete:
+      tags: 
+        - review
+      summary: Delete a review
+      parameters:
+        - name: movie_id
+          in: path
+          required: true
+          description: ID of the movie that contains the review
+          schema:
+            $ref: '#/components/schemas/Movie' 
+        - name: review_id
+          in: path
+          required: true
+          description: ID of the review to delete
+          schema:
+            $ref: '#/components/schemas/Review'
+      responses:
+        '204':
+          description: Review deleted successfully
+        '404':
+          description: not found
+    put:
+      tags: 
+        - review
+      summary: Update a review
+      parameters:
+        - name: movie_id
+          in: path
+          required: true
+          description: ID of the movie that contains the review
+          schema:
+            $ref: '#/components/schemas/Movie'
+        - name: review_id
+          in: path
+          required: true
+          description: ID of the review to update
+          schema:
+            $ref: '#/components/schemas/Review'
+      responses:
+       '200':
+          description: Review updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+       '404':
+          description: Review not found
+  /movies/{movie_id}/reviews/{review_id}/like/:
+    post:
+      tags: 
+        - review
+      summary: Like a review
+      parameters:
+        - name: movie_id
+          in: path
+          required: true
+          description: ID of the movie that contains the review
+          schema:
+            $ref: '#/components/schemas/Movie'
+        - name: review_id
+          in: path
+          required: true
+          description: ID of the review to like
+          schema:
+            $ref: '#/components/schemas/Review'
+      responses:
+        '200':
+          description: Review liked successfully  
+        '404':
+          description: Review not found
+  /signup:
+    post:
+      tags:
+        - user
+      summary: Creare user
+      description: creare cont user
+      operationId: createUser
+      requestBody:
+        description: Creaza obiectul user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/User'
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid input
+  /users/login:
+    post:
+      tags:
+        - user
+      summary: se conecteaza la cont 
+      description: ''
+      operationId: loginUser
+      responses:
+        '200':
+          description: Autentificare reușită
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid username/password supplied
+  /users:
+    get:
+      tags:
+        - user
+      summary: returneaza datele userului 
+      description: ''
+      operationId: getUser
+      parameters:
+        - name: username
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: email
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description:  not found
+    put:
+      tags:
+        - user
+      summary: Update user
+      description: o poate face doar daca este logat, poate sa si schimbe emailul sau parola
+      operationId: updateUser
+      parameters:
+        - name: email
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: password
+          in: query
+          required: false
+          schema:
+            type: string
+      requestBody:
+        description: Update an existent user in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid input
+        '404':
+          description: not found
+    delete:
+      tags:
+        - user
+      summary: Delete user
+      description: o poate face doar daca este logat la cont
+      operationId: deleteUser
+      responses:
+        '204':
+          description: User deleted successfully
+        '404':
+          description: not found
+components:
+  schemas:
+    Movie:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        runtime:
+          type: integer
+        picture:
+          type: string
+          format: binary
+        release:
+          type: string
+          format: date
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+    Review:
+      type: object
+      properties:
+        id:
+          type: integer
+        movie_id:
+          type: integer
+        user_id:
+          type: integer
+        post_date:
+          type: string
+          format: date
+        message:
+          type: string
+        rating:
+          type: integer
+        likes:
+          type: integer
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+        birth_date:
+          type: string
+          format: date
