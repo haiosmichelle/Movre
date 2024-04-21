@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-var utils = require('../utils/writer.js');
-var Movie = require('../service/MovieService');
+var utils = require("../utils/writer.js");
+var Movie = require("../service/MovieService");
 
-module.exports.moviesGET = function moviesGET (req, res, next) {
+exports.moviesGET = (_req, res, _next) => {
   Movie.moviesGET()
     .then(function (response) {
       utils.writeJson(res, response);
@@ -13,8 +13,9 @@ module.exports.moviesGET = function moviesGET (req, res, next) {
     });
 };
 
-module.exports.moviesIdGET = function moviesIdGET (req, res, next, id) {
-  Movie.moviesIdGET(id)
+exports.moviesIdGET = (req, res, _next) => {
+  const movieId = req.params.movieId;
+  Movie.moviesIdGET(movieId)
     .then(function (response) {
       utils.writeJson(res, response);
     })

@@ -1,9 +1,11 @@
-'use strict';
+"use strict";
 
-var utils = require('../utils/writer.js');
-var User = require('../service/UserService');
+var utils = require("../utils/writer.js");
+var User = require("../service/UserService");
 
-module.exports.createUser = function createUser (req, res, next, body) {
+exports.createUser = (req, res, _next) => {
+  const body = req.body;
+  console.log(body);
   User.createUser(body)
     .then(function (response) {
       utils.writeJson(res, response);
@@ -13,17 +15,7 @@ module.exports.createUser = function createUser (req, res, next, body) {
     });
 };
 
-module.exports.createUser = function createUser (req, res, next, body) {
-  User.createUser(body)
-    .then(function (response) {
-      utils.writeJson(res, response);
-    })
-    .catch(function (response) {
-      utils.writeJson(res, response);
-    });
-};
-
-module.exports.deleteUser = function deleteUser (req, res, next) {
+exports.deleteUser = (req, res, next) => {
   User.deleteUser()
     .then(function (response) {
       utils.writeJson(res, response);
@@ -33,7 +25,9 @@ module.exports.deleteUser = function deleteUser (req, res, next) {
     });
 };
 
-module.exports.getUser = function getUser (req, res, next, username, email) {
+exports.getUser = (req, res, next) => {
+  const username = req.body.username;
+  const email = req.body.email;
   User.getUser(username, email)
     .then(function (response) {
       utils.writeJson(res, response);
@@ -43,8 +37,10 @@ module.exports.getUser = function getUser (req, res, next, username, email) {
     });
 };
 
-module.exports.loginUser = function loginUser (req, res, next) {
-  User.loginUser()
+exports.loginUser = (req, res, _next) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  User.loginUser(email, password)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -53,17 +49,10 @@ module.exports.loginUser = function loginUser (req, res, next) {
     });
 };
 
-module.exports.updateUser = function updateUser (req, res, next, body, email, password) {
-  User.updateUser(body, email, password)
-    .then(function (response) {
-      utils.writeJson(res, response);
-    })
-    .catch(function (response) {
-      utils.writeJson(res, response);
-    });
-};
-
-module.exports.updateUser = function updateUser (req, res, next, body, email, password) {
+exports.updateUser = (req, res, _next) => {
+  const body = req.body;
+  const email = req.body.email;
+  const password = req.body.password;
   User.updateUser(body, email, password)
     .then(function (response) {
       utils.writeJson(res, response);

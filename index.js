@@ -1,54 +1,68 @@
-'use strict';
-const { sequelizePostgres, sequelizeMySQL, sequelizeSQLite } = require('./dataBase/database');
-const User = require('./models/user');
+"use strict";
+const express = require("express");
+const bodyParser = require("body-parser");
+const swaggerUI = require("swagger-ui-express");
+const swaggerSpec = require("./swagger");
+const {
+  sequelizePostgres,
+  sequelizeMySQL,
+  sequelizeSQLite,
+} = require("./dataBase/database");
+const movieRoutes = require("./routes/Movie");
+const userRoutes = require("./routes/User");
+const reviewRoutes = require("./routes/Review");
+const User = require("./models/user");
 
-var path = require('path');
-var http = require('http');
+const app = express();
 
-var oas3Tools = require('oas3-tools');
-var serverPort = 8080;
+app.use(bodyParser.json());
 
-// swaggerRouter configuration
-var options = {
-    routing: {
-        controllers: path.join(__dirname, './controllers')
-    },
-};
+app.use(movieRoutes);
+app.use(userRoutes);
+app.use(reviewRoutes);
 
-var expressAppConfig = oas3Tools.expressAppConfig(path.join(__dirname, 'api/openapi.yaml'), options);
-var app = expressAppConfig.getApp();
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
-// Initialize the Swagger middleware
-http.createServer(app).listen(serverPort, function () {
-    console.log('Your server is listening on port %d (http://localhost:%d)', serverPort, serverPort);
-    console.log('Swagger-ui is available on http://localhost:%d/docs', serverPort);
+app.use((_req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, ,Authorization");
+  next();
+});
+
+app.use((error, _req, res, _next) => {
+  console.log(error);
+  const status = error.statusCode || 500;
+  const message = error.message;
+  const data = error.data;
+  res.status(status).json({ message: message, data: data });
 });
 
 async function testDatabases() {
-    try {
-      await sequelizePostgres.authenticate();
-      console.log('Conexiunea la PostgreSQL reușită.');
-    } catch (error) {
-      console.error('Conexiunea la PostgreSQL a eșuat:', error);
-    }
-  
-    // try {
-    //   await dbs.mysql.authenticate();
-    //   console.log('Conexiunea la MySQL reușită.');
-    // } catch (error) {
-    //   console.error('Conexiunea la MySQL a eșuat:', error);
-    // }
-  
+  try {
+    await sequelizePostgres.authenticate();
+    console.log("Conexiunea la PostgreSQL reușită.");
+  } catch (error) {
+    console.error("Conexiunea la PostgreSQL a eșuat:", error);
   }
-  async function initializeDatabase() {
-    try {
-      await User.sync({ force: true }); 
-      console.log('Tabelul "Users" a fost creat cu succes.');
-    } catch (error) {
-      console.error('Eroare la crearea tabelului "Users":', error);
-    }
-  }
-  
 
-  testDatabases();
-//   initializeDatabase();
+  // try {
+  //   await dbs.mysql.authenticate();
+  //   console.log('Conexiunea la MySQL reușită.');
+  // } catch (error) {
+  //   console.error('Conexiunea la MySQL a eșuat:', error);
+  // }
+}
+// async function initializeDatabase() {
+//   try {
+//     await User.sync({ force: true });
+//     console.log('Tabelul "Users" a fost creat cu succes.');
+//   } catch (error) {
+//     console.error('Eroare la crearea tabelului "Users":', error);
+//   }
+// }
+
+//testDatabases();
+
+//initializeDatabase();
+app.listen(8080, () => console.log(`The server is running on port 8080`));
