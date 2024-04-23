@@ -340,6 +340,14 @@ paths:
       summary: Delete user
       description: o poate face doar daca este logat la cont
       operationId: deleteUser
+      parameters:
+      - name: email
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
       responses:
         "204":
           description: User deleted successfully

@@ -68,11 +68,6 @@ router.post("/users/login", userController.loginUser);
  *     description: Returnează detalii despre un utilizator specific.
  *     tags: [user]
  *     parameters:
- *       - name: username
- *         in: query
- *         required: false
- *         schema:
- *           type: string
  *       - name: email
  *         in: query
  *         required: false
@@ -95,19 +90,15 @@ router.post("/users/login", userController.loginUser);
  *       - name: email
  *         in: query
  *         required: false
+ *         style: form
+ *         explode: true
  *         schema:
- *           type: string
+ *             type: string
  *       - name: password
  *         in: query
  *         required: false
  *         schema:
  *           type: string
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/User'
  *     responses:
  *       '200':
  *         description: Detalii despre utilizator actualizate cu succes
@@ -123,6 +114,14 @@ router.post("/users/login", userController.loginUser);
  *     summary: Șterge utilizator
  *     description: Șterge un utilizator existent.
  *     tags: [user]
+ *     parameters:
+ *        - name: email
+ *          in: query
+ *          required: false
+ *          style: form
+ *          explode: true
+ *          schema:
+ *             type: string
  *     responses:
  *       '204':
  *         description: Utilizator șters cu succes

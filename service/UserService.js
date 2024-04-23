@@ -10,28 +10,32 @@ const { Sequelize, literal } = require("sequelize");
  * returns User
  **/
 exports.createUser = function (body) {
-  return new Promise(async function (resolve, reject) {
-    var examples = {};
-    examples["application/json"] = {
-      password: body.password,
-      birth_date: body.birth_date,
-      name: body.name,
-      id: 0,
-      email: body.email,
-    };
-    const newUser = await User.create({
-      name: body.name,
-      email: body.email,
-      password: body.password,
-      birth_date: body.birth_date,
-    });
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+  return new Promise(async function(resolve, reject) {
+    if (!body.email || !body.name || !body.birth_date || !body.password || body.password.length < 8) {
+      resolve({ status: 400, message: "Input invalid. Toate câmpurile sunt necesare sau parola trebuie să aibă minim 8 caractere." });
+      return;
+    }
+
+    try {
+      const newUser = await User.create({
+        name: body.name,
+        email: body.email,
+        password: body.password, 
+        birth_date: body.birth_date,
+      });
+
+      if (newUser) {
+        resolve({ status: 201, data: newUser });
+      } else {
+        resolve({ status: 400, message: "Nu s-a putut crea utilizatorul." });
+      }
+    } catch (error) {
+      reject({ status: 500, message: "Eroare la server", error: error });
     }
   });
 };
+
+
 
 /**
  * Delete user
@@ -40,11 +44,20 @@ exports.createUser = function (body) {
  * no response value expected for this operation
  **/
 exports.deleteUser = function (email) {
-  return new Promise(async function (resolve, reject) {
-    const user = await User.destroy({ where: { email } });
-    resolve({ message: "Utilizatorul s-a sters" });
+  return new Promise(async function(resolve, reject) {
+    try {
+      const result = await User.destroy({ where: { email } });
+      if (result === 0) {
+        resolve({ status: 404, message: "Utilizatorul nu a fost găsit." });
+      } else {
+        resolve({ status: 202, message: "Utilizatorul s-a șters cu succes." });
+      }
+    } catch (error) {
+      reject({ status: 500, message: "Eroare la server", error: error });
+    }
   });
 };
+
 
 /**
  * returneaza datele userului
@@ -53,27 +66,21 @@ exports.deleteUser = function (email) {
  * email String  (optional)
  * returns User
  **/
-exports.getUser = function () {
+exports.getUser = function (email) {
   return new Promise(async function (resolve, reject) {
-    const examples = {};
-    examples["application/json"] = {
-      password: "password",
-      birth_date: "2000-01-23",
-      name: "name",
-      id: 0,
-      email: "email",
-    };
-    let users = [];
-    users = await User.findAll();
-
-    if (Object.keys(users).length > 0) {
-      console.log(users);
-      resolve();
-    } else {
-      resolve();
+    try {
+      const user = await User.findOne({ where: { email } });
+      if (user) {
+        resolve({ status: 202, data: user });  
+      } else {
+        resolve({ status: 404, data: { message: "User not found" } }); 
+      }
+    } catch (error) {
+      reject(error); 
     }
   });
 };
+
 
 /**
  * se conecteaza la cont
@@ -82,28 +89,21 @@ exports.getUser = function () {
  **/
 exports.loginUser = function (email, password) {
   return new Promise(async function (resolve, reject) {
-    let examples;
-    console.log(email);
-    const user = await User.findOne({ where: { email } });
-
-    // Verifică dacă utilizatorul a fost găsit
-    if (!user) {
-      examples = { message: "Utilizatorul nu a fost găsit." };
-    } else {
-      // Verifică dacă parola furnizată corespunde cu parola stocată
-      if (user.password === password) {
-        examples = { message: "Utilizator autentificat cu succes!" };
+    try {
+      const user = await User.findOne({ where: { email } });
+      if (!user) {
+        resolve({ status: 404, message: "Utilizatorul sau parola este incorectă." });
+      } else if (user.password === password) {
+        resolve({ status: 202, message: "Utilizator autentificat cu succes!" });
       } else {
-        examples = { message: "Parola furnizată este incorectă." };
+        resolve({ status: 404, message: "Utilizatorul sau parola este incorectă." });
       }
-    }
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve(examples);
+    } catch (error) {
+      reject({ status: 500, message: "Eroare la server", error: error });
     }
   });
 };
+
 
 /**
  * Update user
@@ -114,8 +114,25 @@ exports.loginUser = function (email, password) {
  * password String  (optional)
  * no response value expected for this operation
  **/
-exports.updateUser = function (body, email, password) {
-  return new Promise(function (resolve, reject) {
-    resolve();
+exports.updateUser = function(email, password) {
+  return new Promise(async function(resolve, reject) {
+    try {
+      if (!password || password.length < 8) { 
+        resolve({ status: 400, message: "Inputul este invalid. Parola trebuie să fie de cel puțin 8 caractere." });
+        return;
+      }
+
+      const user = await User.findOne({ where: { email } });
+      if (!user) {
+        resolve({ status: 404, message: "Utilizatorul nu a fost găsit." });
+      } else {
+        user.password = password;
+        await user.save();
+        resolve({ status: 202, message: "S-a modificat parola cu succes." });
+      }
+    } catch (error) {
+      reject({ status: 500, message: "Eroare la server", error: error }); 
+    }
   });
 };
+

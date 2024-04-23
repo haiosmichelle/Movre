@@ -3,8 +3,10 @@
 var utils = require("../utils/writer.js");
 var Review = require("../service/ReviewService");
 
-exports.moviesIdReviewsGET = (req, res, next, id) => {
-  Review.moviesIdReviewsGET(id)
+exports.moviesIdReviewsGET = (req, res, next) => {
+  const movieId = parseInt(req.params.movieId);
+  console.log("review "+movieId);
+  Review.moviesIdReviewsGET(movieId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -13,8 +15,10 @@ exports.moviesIdReviewsGET = (req, res, next, id) => {
     });
 };
 
-exports.moviesIdReviewsPOST = (req, res, next, id) => {
-  Review.moviesIdReviewsPOST(id)
+exports.moviesIdReviewsPOST = (req, res, next) => {
+  const movieId = parseInt(req.params.movieId);
+  const body = req.body;
+  Review.moviesIdReviewsPOST(body, movieId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -26,11 +30,11 @@ exports.moviesIdReviewsPOST = (req, res, next, id) => {
 exports.moviesMovie_idReviewsReview_idDELETE = (
   req,
   res,
-  next,
-  movie_id,
-  review_id
+  next
 ) => {
-  Review.moviesMovie_idReviewsReview_idDELETE(movie_id, review_id)
+  const movieId = parseInt(req.params.movieId);
+  const reviewId = parseInt(req.params.reviewId)
+  Review.moviesMovie_idReviewsReview_idDELETE(movieId, reviewId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -42,11 +46,12 @@ exports.moviesMovie_idReviewsReview_idDELETE = (
 exports.moviesMovie_idReviewsReview_idLikePOST = (
   req,
   res,
-  next,
-  movie_id,
-  review_id
+  next
 ) => {
-  Review.moviesMovie_idReviewsReview_idLikePOST(movie_id, review_id)
+  const movieId = parseInt(req.params.movieId);
+  const reviewId = parseInt(req.params.reviewId)
+  const body = req.body;
+  Review.moviesMovie_idReviewsReview_idLikePOST(movieId, reviewId,body)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -58,11 +63,14 @@ exports.moviesMovie_idReviewsReview_idLikePOST = (
 exports.moviesMovie_idReviewsReview_idPUT = (
   req,
   res,
-  next,
-  movie_id,
-  review_id
+  next
 ) => {
-  Review.moviesMovie_idReviewsReview_idPUT(movie_id, review_id)
+
+  const movieId = parseInt(req.params.movieId);
+  const reviewId = parseInt(req.params.reviewId)
+
+  const body = req.body;
+  Review.moviesMovie_idReviewsReview_idPUT(movieId, reviewId,body)
     .then(function (response) {
       utils.writeJson(res, response);
     })

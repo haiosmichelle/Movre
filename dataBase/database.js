@@ -1,7 +1,7 @@
 const { Sequelize } = require("sequelize");
 
 // Conexiunea pentru PostgreSQL
-const sequelizePostgres = new Sequelize("movre", "postgres", "Petcu123", {
+const sequelizePostgres = new Sequelize("movre", "postgres", "1234", {
   host: "localhost",
   dialect: "postgres",
 });

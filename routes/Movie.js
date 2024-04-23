@@ -57,5 +57,34 @@ router.get("/movies", movieController.moviesGET);
  *         description: Filmul nu a fost găsit
  */
 router.get("/movies/:movieId", movieController.moviesIdGET);
-
+/**
+ * @swagger
+ * /movies/{movieId}/raiting:
+ *   post:
+ *     summary: raiting la film
+ *     description: adauga un raiting la film.
+ *     tags: [movie]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     parameters:
+ *       - name: movieId
+ *         in: path
+ *         description: ID-ul filmului care conține recenzia
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Like-ul a fost adăugat cu succes
+ *       '404':
+ *         description: Recenzia nu a fost găsită
+ */
+router.post(
+    "/movies/:movieId/raiting",
+    movieController.moviesIdRaitingPost
+  );
 module.exports = router;
