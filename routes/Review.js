@@ -46,6 +46,12 @@ router.get("/movies/:movieId/reviews", reviewController.moviesIdReviewsGET);
  *     summary: Creează o recenzie pentru un film
  *     description: Creează o recenzie pentru un film specificat prin ID-ul său.
  *     tags: [review]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
  *     parameters:
  *       - name: movieId
  *         in: path
@@ -72,6 +78,12 @@ router.post("/movies/:movieId/reviews", reviewController.moviesIdReviewsPOST);
  *     summary: Actualizează o recenzie
  *     description: Actualizează detaliile unei recenzii pentru un film specificat.
  *     tags: [review]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
  *     parameters:
  *       - name: movieId
  *         in: path
@@ -138,6 +150,12 @@ router.delete(
  *     summary: Like pentru o recenzie
  *     description: Adaugă un like la o recenzie specificată.
  *     tags: [review]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
  *     parameters:
  *       - name: movieId
  *         in: path

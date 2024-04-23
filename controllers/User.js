@@ -16,7 +16,8 @@ exports.createUser = (req, res, _next) => {
 };
 
 exports.deleteUser = (req, res, next) => {
-  User.deleteUser()
+  const email = req.query.email;
+  User.deleteUser(email)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -26,9 +27,8 @@ exports.deleteUser = (req, res, next) => {
 };
 
 exports.getUser = (req, res, next) => {
-  const username = req.body.username;
-  const email = req.body.email;
-  User.getUser(username, email)
+  const email = req.query.email;
+  User.getUser(email)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -38,8 +38,8 @@ exports.getUser = (req, res, next) => {
 };
 
 exports.loginUser = (req, res, _next) => {
-  const email = req.body.email;
-  const password = req.body.password;
+  const email = req.query.email;
+  const password = req.query.password;
   User.loginUser(email, password)
     .then(function (response) {
       utils.writeJson(res, response);
@@ -50,10 +50,10 @@ exports.loginUser = (req, res, _next) => {
 };
 
 exports.updateUser = (req, res, _next) => {
-  const body = req.body;
-  const email = req.body.email;
-  const password = req.body.password;
-  User.updateUser(body, email, password)
+  const email = req.query.email;
+  const password = req.query.password;
+  console.log("pass "+password);
+  User.updateUser(email,password)
     .then(function (response) {
       utils.writeJson(res, response);
     })

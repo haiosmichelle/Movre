@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const swaggerUI = require("swagger-ui-express");
 const swaggerSpec = require("./swagger");
+const Raiting = require("./models/raiting");
 const {
   sequelizePostgres,
   sequelizeMySQL,
@@ -53,14 +54,14 @@ async function testDatabases() {
   //   console.error('Conexiunea la MySQL a eșuat:', error);
   // }
 }
-// async function initializeDatabase() {
-//   try {
-//     await User.sync({ force: true });
-//     console.log('Tabelul "Users" a fost creat cu succes.');
-//   } catch (error) {
-//     console.error('Eroare la crearea tabelului "Users":', error);
-//   }
-// }
+async function initializeDatabase() {
+  try {
+    await Raiting.sync({ force: true });
+    console.log('Tabelul "Users" a fost creat cu succes.');
+  } catch (error) {
+    console.error('Eroare la crearea tabelului "Users":', error);
+  }
+}
 
 //testDatabases();
 
