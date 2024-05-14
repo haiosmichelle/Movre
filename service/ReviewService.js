@@ -103,7 +103,7 @@ exports.moviesMovie_idReviewsReview_idLikePOST = function(movie_id,review_id,bod
         await review.save();
           resolve({ status: 201, data: review }); 
       } else {
-          resolve({ status: 400, message: "Recenzia nu a fost găsită" }); }
+          resolve({ status: 404, message: "Recenzia nu a fost găsită" }); }
   } catch (error) {
       console.error("Error creating review:", error);
       reject({ status: 500, message: "Eroare la server" });
@@ -135,12 +135,11 @@ exports.moviesMovie_idReviewsReview_idPUT = function(movie_id,review_id,body) {
        
         resolve({ status: 404, message: "Recenzia  nu a fost gasita." });
       } else {
-        // Utilizatorul a fost șters cu succes
+       
         resolve({ status: 202, data:review});
       }
     } catch (error) {
-      // Dacă intervine o eroare, folosim reject pentru a trimite eroarea la handler-ul de erori
-      reject({ status: 500, message: "Eroare la server", error: error });
+        reject({ status: 500, message: "Eroare la server", error: error });
     }
   });
 }

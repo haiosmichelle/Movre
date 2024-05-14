@@ -3,7 +3,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const swaggerUI = require("swagger-ui-express");
 const swaggerSpec = require("./swagger");
-const Raiting = require("./models/raiting");
+const Rating = require("./models/rating");
+const path = require('path');
 const {
   sequelizePostgres,
   sequelizeMySQL,
@@ -15,6 +16,13 @@ const reviewRoutes = require("./routes/Review");
 const User = require("./models/user");
 
 const app = express();
+
+app.use((_req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, ,Authorization");
+  next();
+});
 
 app.use(bodyParser.json());
 
@@ -56,14 +64,14 @@ async function testDatabases() {
 }
 async function initializeDatabase() {
   try {
-    await Raiting.sync({ force: true });
+    await Rating.sync({ force: true });
     console.log('Tabelul "Users" a fost creat cu succes.');
   } catch (error) {
     console.error('Eroare la crearea tabelului "Users":', error);
   }
 }
-
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 //testDatabases();
 
-//initializeDatabase();
+// initializeDatabase();
 app.listen(8080, () => console.log(`The server is running on port 8080`));

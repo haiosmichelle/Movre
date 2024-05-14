@@ -24,11 +24,11 @@ exports.moviesIdGET = (req, res, _next) => {
       utils.writeJson(res, response);
     });
 };
-exports.moviesIdRaitingPost = (req, res, _next) => {
+exports.moviesIdRatingPost = (req, res, _next) => {
   const movieId = parseInt(req.params.movieId);
   const body = req.body
   console.log("mov "+movieId)
-  Movie.moviesIdRaitingPost(movieId,body)
+  Movie.moviesIdRatingPost(movieId,body)
     .then(function (response) {
       utils.writeJson(res, response);
     })

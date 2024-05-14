@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const { sequelizePostgres } = require('../dataBase/database');
 
-const Raiting = sequelizePostgres.define('Raiting', {
+const Rating = sequelizePostgres.define('Rating', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -29,4 +29,4 @@ const Raiting = sequelizePostgres.define('Raiting', {
   }
 });
 
-module.exports = Raiting;
+module.exports = Rating;

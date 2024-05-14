@@ -84,7 +84,7 @@ router.get("/movies/:movieId", movieController.moviesIdGET);
  *         description: Recenzia nu a fost găsită
  */
 router.post(
-    "/movies/:movieId/raiting",
-    movieController.moviesIdRaitingPost
+    "/movies/:movieId/rating",
+    movieController.moviesIdRatingPost
   );
 module.exports = router;
