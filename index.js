@@ -3,7 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const swaggerUI = require("swagger-ui-express");
 const swaggerSpec = require("./swagger");
-const Rating = require("./models/rating");
+const Rating = require("./models/Admin");
 const path = require('path');
 const {
   sequelizePostgres,
@@ -13,6 +13,7 @@ const {
 const movieRoutes = require("./routes/Movie");
 const userRoutes = require("./routes/User");
 const reviewRoutes = require("./routes/Review");
+const adminRoutes = require("./routes/Admin");
 const User = require("./models/user");
 
 const app = express();
@@ -29,6 +30,7 @@ app.use(bodyParser.json());
 app.use(movieRoutes);
 app.use(userRoutes);
 app.use(reviewRoutes);
+app.use(adminRoutes);
 
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
@@ -71,7 +73,7 @@ async function initializeDatabase() {
   }
 }
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-//testDatabases();
+// testDatabases();
 
 // initializeDatabase();
 app.listen(8080, () => console.log(`The server is running on port 8080`));

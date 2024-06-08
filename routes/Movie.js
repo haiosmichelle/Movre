@@ -1,6 +1,7 @@
 const express = require("express");
 const { body } = require("express-validator");
 const movieController = require("../controllers/Movie");
+const isAuth = require("../middleware/is-auth");
 
 const router = express.Router();
 
@@ -30,7 +31,7 @@ const router = express.Router();
  *       '404':
  *         description: Filmele nu au fost găsite
  */
-router.get("/movies", movieController.moviesGET);
+router.get("/movies",isAuth, movieController.moviesGET);
 
 /**
  * @swagger
@@ -56,7 +57,7 @@ router.get("/movies", movieController.moviesGET);
  *       '404':
  *         description: Filmul nu a fost găsit
  */
-router.get("/movies/:movieId", movieController.moviesIdGET);
+router.get("/movies/:movieId", isAuth, movieController.moviesIdGET);
 /**
  * @swagger
  * /movies/{movieId}/raiting:
@@ -84,7 +85,37 @@ router.get("/movies/:movieId", movieController.moviesIdGET);
  *         description: Recenzia nu a fost găsită
  */
 router.post(
-    "/movies/:movieId/rating",
-    movieController.moviesIdRatingPost
+    "/movies/:movieId/rating", isAuth, movieController.moviesIdRatingPost
   );
+
+/**
+ * @swagger
+ * /movies/{movieId}/watchList:
+ *   post:
+ *     summary: Adaugă filmul în watchlist
+ *     description: Adaugă un film în watchlist-ul utilizatorului.
+ *     tags: [movie]
+ *     parameters:
+ *       - name: movieId
+ *         in: path
+ *         description: ID-ul filmului care va fi adăugat în watchlist
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/WatchList'
+ *     responses:
+ *       '200':
+ *         description: Filmul a fost adăugat în watchlist cu succes
+ *       '404':
+ *         description: Filmul nu a fost găsit
+ */
+router.post(
+  "/movies/:movieId/watchList", isAuth ,movieController.moviesWatchList
+);
+
 module.exports = router;

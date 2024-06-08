@@ -38,8 +38,8 @@ exports.getUser = (req, res, next) => {
 };
 
 exports.loginUser = (req, res, _next) => {
-  const email = req.query.email;
-  const password = req.query.password;
+  const email = req.body.email;
+  const password = req.body.password;
   User.loginUser(email, password)
     .then(function (response) {
       utils.writeJson(res, response);

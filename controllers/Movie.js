@@ -36,3 +36,15 @@ exports.moviesIdRatingPost = (req, res, _next) => {
       utils.writeJson(res, response);
     });
 };
+exports.moviesWatchList = (req, res, _next) => {
+  const movieId = parseInt(req.params.movieId);
+  const body = req.body
+  console.log("mov "+body)
+  Movie.moviesWatchList(movieId,body)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};

@@ -1,6 +1,7 @@
 'use strict';
 const Movie = require("../models/movie");
 const Rating = require("../models/rating");
+const watchList = require("../models/watchList");
 const { Sequelize, literal } = require("sequelize");
 /**
  * Retrieve all movies
@@ -94,6 +95,26 @@ exports.moviesIdRatingPost = function(id, body) {
     }
   });
 };
+exports.moviesWatchList = function(id, body) {
+  return new Promise(async function(resolve, reject) {
+    try {
+      console.log("am intrat");
+      const newWatchList = await watchList.create({ 
+        userId: body.user_id,
+        MovieId: id,
+      });
+      if (newWatchList) {
+        resolve({ status: 201, data: newWatchList });
+      } else {
+        resolve({ status: 400, message: "Nu s-a putut crea watchList-ul." });
+      }
+    } catch (error) {
+      console.error("Error creating rating:", error);
+      reject({ status: 500, message: "Eroare la server", error: error }); // Eroare de server
+    }
+  });
+};
+
 
 
 
