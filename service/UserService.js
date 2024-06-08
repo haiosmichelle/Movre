@@ -1,7 +1,8 @@
 "use strict";
 const User = require("../models/user");
 const { Sequelize, literal } = require("sequelize");
-
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 /**
  * Creare user
  * creare cont user
@@ -17,10 +18,12 @@ exports.createUser = function (body) {
     }
 
     try {
+      const hashedPassword = await bcrypt.hash(body.password, 12);
+      
       const newUser = await User.create({
         name: body.name,
         email: body.email,
-        password: body.password, 
+        password: hashedPassword,
         birth_date: body.birth_date,
       });
 
@@ -34,7 +37,6 @@ exports.createUser = function (body) {
     }
   });
 };
-
 
 
 /**
@@ -93,18 +95,31 @@ exports.loginUser = function (email, password) {
       const user = await User.findOne({ where: { email } });
       if (!user) {
         resolve({ status: 404, message: "Utilizatorul sau parola este incorectă." });
-      } else if (user.password === password) {
-        resolve({ status: 202, message: "Utilizator autentificat cu succes!" });
-      } else {
-        resolve({ status: 404, message: "Utilizatorul sau parola este incorectă." });
+        return;
       }
+
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+        resolve({ status: 404, message: "Utilizatorul sau parola este incorectă." });
+        return;
+      }
+
+      const token = jwt.sign(
+        {
+          email: user.email,
+          userId: user.id.toString(),
+        },
+        "somesupersecretsecret",
+        { expiresIn: "1h" }
+      );
+
+      resolve({ status: 202, message: "Utilizator autentificat cu succes!", token: token, userId: user.id.toString() });
     } catch (error) {
+      console.error("Eroare la server: ", error); // Log the error for debugging
       reject({ status: 500, message: "Eroare la server", error: error });
     }
   });
-};
-
-
+}
 /**
  * Update user
  * o poate face doar daca este logat, poate sa si schimbe emailul sau parola

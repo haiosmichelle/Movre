@@ -1,6 +1,7 @@
 const express = require("express");
 const { body } = require("express-validator");
 const userController = require("../controllers/User");
+const isAuth = require("../middleware/is-auth"); 
 
 const router = express.Router();
 
@@ -128,8 +129,8 @@ router.post("/users/login", userController.loginUser);
  *       '404':
  *         description: User not found
  */
-router.get("/users", userController.getUser);
-router.put("/users", userController.updateUser);
-router.delete("/users", userController.deleteUser);
+router.get("/users", isAuth, userController.getUser);
+router.put("/users", isAuth,  userController.updateUser);
+router.delete("/users", isAuth,  userController.deleteUser);
 
 module.exports = router;

@@ -1,6 +1,7 @@
 const express = require("express");
 const { body } = require("express-validator");
 const reviewController = require("../controllers/Review");
+const isAuth = require("../middleware/is-auth");
 
 const router = express.Router();
 
@@ -37,7 +38,7 @@ const router = express.Router();
  *       '404':
  *         description: Filmul nu a fost găsit sau nu are recenzii
  */
-router.get("/movies/:movieId/reviews", reviewController.moviesIdReviewsGET);
+router.get("/movies/:movieId/reviews",isAuth, reviewController.moviesIdReviewsGET);
 
 /**
  * @swagger
@@ -69,7 +70,7 @@ router.get("/movies/:movieId/reviews", reviewController.moviesIdReviewsGET);
  *       '400':
  *         description: Cerere incorectă
  */
-router.post("/movies/:movieId/reviews", reviewController.moviesIdReviewsPOST);
+router.post("/movies/:movieId/reviews", isAuth, reviewController.moviesIdReviewsPOST);
 
 /**
  * @swagger
@@ -108,8 +109,7 @@ router.post("/movies/:movieId/reviews", reviewController.moviesIdReviewsPOST);
  *         description: Recenzia nu a fost găsită
  */
 router.put(
-  "/movies/:movieId/reviews/:reviewId",
-  reviewController.moviesMovie_idReviewsReview_idPUT
+  "/movies/:movieId/reviews/:reviewId", isAuth, reviewController.moviesMovie_idReviewsReview_idPUT
 );
 
 /**
@@ -139,7 +139,7 @@ router.put(
  *         description: Recenzia nu a fost găsită
  */
 router.delete(
-  "/movies/:movieId/reviews/:reviewId",
+  "/movies/:movieId/reviews/:reviewId", isAuth,
   reviewController.moviesMovie_idReviewsReview_idDELETE
 );
 
@@ -176,7 +176,7 @@ router.delete(
  *         description: Recenzia nu a fost găsită
  */
 router.post(
-  "/movies/:movieId/reviews/:reviewId/like",
+  "/movies/:movieId/reviews/:reviewId/like",isAuth,
   reviewController.moviesMovie_idReviewsReview_idLikePOST
 );
 
