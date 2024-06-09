@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const { sequelizePostgres } = require('../dataBase/database');
-const Sequelize = require('sequelize');
 
 const models = {};
 
@@ -14,11 +13,6 @@ fs.readdirSync(modelsDir).forEach(file => {
   }
 });
 
-// Inițializează modelele
-Object.keys(models).forEach(modelName => {
-  models[modelName] = models[modelName](sequelizePostgres, Sequelize.DataTypes);
-});
-
 // Definirea relațiilor între modele (dacă există)
 Object.keys(models).forEach(modelName => {
   if (models[modelName].associate) {
@@ -28,6 +22,6 @@ Object.keys(models).forEach(modelName => {
 
 module.exports = {
   sequelize: sequelizePostgres,
-  Sequelize,
+  Sequelize: require('sequelize'),
   ...models
 };
