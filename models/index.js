@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { sequelizePostgres } = require('../dataBase/database');
+const Sequelize = require('sequelize');
 
 const models = {};
 
@@ -8,7 +9,7 @@ const models = {};
 const modelsDir = path.join(__dirname);
 fs.readdirSync(modelsDir).forEach(file => {
   if (file !== 'index.js' && file.endsWith('.js')) {
-    const model = require(path.join(modelsDir, file))(sequelizePostgres, require('sequelize').DataTypes);
+    const model = require(path.join(modelsDir, file))(sequelizePostgres, Sequelize.DataTypes);
     models[model.name] = model;
   }
 });
@@ -22,6 +23,6 @@ Object.keys(models).forEach(modelName => {
 
 module.exports = {
   sequelize: sequelizePostgres,
-  Sequelize: require('sequelize'),
+  Sequelize,
   ...models
 };
