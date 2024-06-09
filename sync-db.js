@@ -44,12 +44,12 @@ sequelizePostgres.sync({ force: true })
       like: 10
     });
 
-    await models.LikeReview.create({
+    await models.likeReview.create({
       ReviewId: 1,
       userId: 1
     });
 
-    await models.WatchList.create({
+    await models.watchList.create({
       MovieId: 1,
       userId: 1
     });
