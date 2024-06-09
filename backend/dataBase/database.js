@@ -1,9 +1,12 @@
+require('dotenv').config();
+
 const { Sequelize } = require("sequelize");
 
 // Conexiunea pentru PostgreSQL
-const sequelizePostgres = new Sequelize("movre", "postgres", "Petcu123", {
-  host: "localhost",
+const sequelizePostgres = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
+  host: process.env.DB_HOST,
   dialect: "postgres",
+  port: process.env.DB_PORT
 });
 
 // Conexiunea pentru MySQL
